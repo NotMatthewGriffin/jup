@@ -27,3 +27,9 @@ class JupPlugin(Plugin):
             main_deps.extend(poetry.pyproject.data.get('tool', {}).get('jup', {}).get('deps', []))
             return main_deps, extras
         SdistBuilder.convert_dependencies = classmethod(dependencies_with_jup)
+
+        original_files = SdistBuilder.find_files_to_add
+        def files_to_add_with_jup(*args, **kwargs):
+            result = original_files(*args, **kwargs)
+            return set(filter(lambda filename : filename.path.name != 'pyproject.toml', result))
+        SdistBuilder.find_files_to_add = files_to_add_with_jup
