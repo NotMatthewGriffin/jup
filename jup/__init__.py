@@ -17,7 +17,7 @@ class JupPlugin(Plugin):
             env = env_manager.get(True)
             for dep in get_jup_dependencies():
                 io.write_line(f"Just using pip for {dep}")
-                pip_result = env.run_pip("install", "-U", dep)
+                pip_result = env.run_pip("install", "-U", *dep.split(' '))
                 io.write_line(str(pip_result))
             return result
         Installer._do_install = with_jup
